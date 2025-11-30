@@ -1,0 +1,21 @@
+@host = http://localhost:8080
+
+### 1. CRIAR: Encurtar uma URL
+POST {{host}}/shorten
+Content-Type: text/plain
+
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+> {%
+    client.global.set("shortCode", response.body.split("/").pop());
+    client.log("Código gerado: " + client.global.get("shortCode"));
+%}
+
+### 2. LEITURA 1: Primeiro Acesso (Cache Miss)
+GET {{host}}/{{shortCode}}
+
+### 3. LEITURA 2: Segundo Acesso (Cache Hit - Instantâneo)
+GET {{host}}/{{shortCode}}
+
+### 4. LEITURA 3: Terceiro Acesso (Incrementar Contador)
+GET {{host}}/{{shortCode}}
